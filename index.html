@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Finder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .add-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .search-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .contacts {
+            margin-top: 20px;
+        }
+
+        .contact-card {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .contact-info {
+            font-size: 14px;
+        }
+
+        .delete-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .empty {
+            text-align: center;
+            color: gray;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>📱 Contact Finder</h2>
+
+    <input type="text" id="name" placeholder="Enter Name">
+    <input type="text" id="phone" placeholder="Enter Phone Number">
+    <button class="btn add-btn" onclick="addContact()">Add Contact</button>
+
+    <input type="text" id="search" placeholder="Search by name or number">
+    <button class="btn search-btn" onclick="searchContact()">Search</button>
+
+    <div class="contacts" id="list"></div>
+</div>
+
+<script>
+let contacts = [];
+
+function addContact() {
+    let name = document.getElementById("name").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+
+    if (name === "" || phone === "") {
+        alert("Fill all fields");
+        return;
+    }
+
+    contacts.push({name, phone});
+    display();
+
+    document.getElementById("name").value = "";
+    document.getElementById("phone").value = "";
+}
+
+function searchContact() {
+    let query = document.getElementById("search").value.toLowerCase();
+
+    let result = contacts.filter(c =>
+        c.name.toLowerCase().includes(query) ||
+        c.phone.includes(query)
+    );
+
+    display(result);
+}
+
+function deleteContact(index) {
+    contacts.splice(index, 1);
+    display();
+}
+
+function display(data = contacts) {
+    let list = document.getElementById("list");
+    list.innerHTML = "";
+
+    if (data.length === 0) {
+        list.innerHTML = "<div class='empty'>No contacts found</div>";
+        return;
+    }
+
+    data.forEach((c, index) => {
+        let div = document.createElement("div");
+        div.className = "contact-card";
+
+        div.innerHTML = `
+            <div class="contact-info">
+                <strong>${c.name}</strong><br>
+                ${c.phone}
+            </div>
+            <button class="delete-btn" onclick="deleteContact(${index})">Delete</button>
+        `;
+
+        list.appendChild(div);
+    });
+}
+</script>
+
+</body>
+</html>
