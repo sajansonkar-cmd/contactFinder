@@ -3,7 +3,7 @@
 #include <algorithm>
 using namespace std;
 
-const int MAX = 100;
+const int MAX = 1;
 
 struct Contact {
     string name;
